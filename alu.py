@@ -3,8 +3,9 @@ from memory import read_byte, write_byte, RAM_ORIGIN
 from ascii_table import ascii_table
 
 def execute(opcode, regA, regB):
+    # Execute a single instruction and return (halt, new_pc)
     if opcode == 0b0000:  # NOP
-        return False
+        return False, None
 
     elif opcode == 0b0001:  # LOAD
         addr = read_register(regB)
@@ -28,15 +29,13 @@ def execute(opcode, regA, regB):
 
     elif opcode == 0b0101:  # JMP
         addr = read_register(regA)
-        global pc
-        pc = addr
-        return False
+        return False, addr
 
     elif opcode == 0b0110:  # PRINT
         val = read_register(regA)
         quick_print(ascii_table.get(val, "?"))
 
     elif opcode == 0b0111:  # HALT
-        return True
+        return True, None
 
-    return False
+    return False, None
