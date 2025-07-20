@@ -7,11 +7,15 @@ from programs.hello_world import PROGRAM_LENGTH
 pc = 0  # program counter
 
 def run():
+    # Run the loaded program starting at pc
     global pc
     while pc < PROGRAM_LENGTH:
         instr = fetch_instruction(pc)
         opcode, regA, regB = decode_instruction(instr)
-        halt = execute(opcode, regA, regB)
+        halt, new_pc = execute(opcode, regA, regB)
         if halt:
             break
-        pc += 1
+        if new_pc is not None:
+            pc = new_pc
+        else:
+            pc += 1
