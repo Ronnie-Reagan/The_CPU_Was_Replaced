@@ -29,6 +29,18 @@ def write_byte(origin, val):
         bit = (val >> (7 - i)) & 1
         write_bit(x, y, bit)
 
+
+def load_program(program):
+    # Write a list of instruction bytes into ROM
+    for idx, byte in enumerate(program):
+        write_byte((ROM_ORIGIN[0], ROM_ORIGIN[1] + idx), byte)
+
+
+def load_data(data, start=0):
+    # Write a list of bytes into RAM starting at ``start``
+    for offset, byte in enumerate(data):
+        write_byte((RAM_ORIGIN[0], RAM_ORIGIN[1] + start + offset), byte)
+
 def fetch_instruction(index):
     row = ROM_ORIGIN[1] + index
     return read_byte((ROM_ORIGIN[0], row))
@@ -38,3 +50,4 @@ def decode_instruction(byte):
     regA = (byte >> 2) & 0b11
     regB = byte & 0b11
     return opcode, regA, regB
+
